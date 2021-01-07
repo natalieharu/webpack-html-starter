@@ -1,6 +1,6 @@
 import '@js/modules/module';
 
-import '@sass/style.sass';
+import '@css/style.css';
 
 if(module && module.hot) {
     module.hot.accept();

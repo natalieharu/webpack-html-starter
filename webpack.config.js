@@ -76,7 +76,7 @@ module.exports = {
 		alias: {
 			'@': path.resolve(__dirname, 'app/'),
 			'@js': path.resolve(__dirname, 'app/js/'),
-			'@sass': path.resolve(__dirname, 'app/sass/'),
+			'@css': path.resolve(__dirname, 'app/css/'),
 		},
 	},
 	output: {
@@ -97,7 +97,7 @@ module.exports = {
 		rules: [
 			isIE ? supportIE : {},
 			{
-				test: /\.(html)$/,
+				test: /\.html$/,
 				use: [
 					'html-loader',
 				],
@@ -122,7 +122,7 @@ module.exports = {
 				},
 			},
 			{
-				test: /\.(sa|sc|c)ss$/i,
+				test: /\.s(a|c)ss$/i,
 				use: [
 					isProd ? MiniCssExtractPlugin.loader : 'style-loader',
 					{
@@ -143,6 +143,14 @@ module.exports = {
 							sourceMap: true,
 						},
 					},
+				],
+			},
+			{
+				test: /\.css$/i,
+				use: [
+					MiniCssExtractPlugin.loader,
+					'css-loader',
+					'postcss-loader',
 				],
 			},
 		],
