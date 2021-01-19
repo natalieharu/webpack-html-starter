@@ -9,6 +9,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isProd = process.env.MODE === 'production';
 const isIE = process.env.IE;
+const isDevServer = process.env.SERVE;
 
 const plugins = [
 	new CaseSensitivePathsPlugin(),
@@ -28,6 +29,7 @@ const plugins = [
 		filename: 'index.html',
 		template: 'index.html',
 		chunks: ['main'],
+		favicon: 'img/favicon.ico',
 	}),
 	new HTMLWebpackPartialsPlugin({
 		path: path.join(__dirname, './app/partials/menu.html'),
@@ -77,12 +79,13 @@ module.exports = {
 			'@': path.resolve(__dirname, 'app/'),
 			'@js': path.resolve(__dirname, 'app/js/'),
 			'@css': path.resolve(__dirname, 'app/css/'),
+			'@img': path.resolve(__dirname, 'app/img/'),
 		},
 	},
 	output: {
 		filename: 'js/[name].[contenthash].js',
 		path: path.resolve(__dirname, 'dist'),
-		publicPath: '/',
+		publicPath: isDevServer ? '/' : './',
 	},
 	devServer: {
 		port: 3100,
@@ -125,30 +128,20 @@ module.exports = {
 				test: /\.s(a|c)ss$/i,
 				use: [
 					isProd ? MiniCssExtractPlugin.loader : 'style-loader',
-					{
-						loader: 'css-loader',
-						options: {
-							sourceMap: true,
-						},
-					},
-					{
-						loader: 'postcss-loader',
-						options: {
-							sourceMap: true,
-						},
-					},
-					{
-						loader: 'sass-loader',
-						options: {
-							sourceMap: true,
-						},
-					},
+					'css-loader',
+					'postcss-loader',
+					'sass-loader',
 				],
 			},
 			{
 				test: /\.css$/i,
 				use: [
-					MiniCssExtractPlugin.loader,
+					{
+						loader: MiniCssExtractPlugin.loader,
+						options: {
+							publicPath: (resourcePath, context) => `${path.relative(path.dirname(resourcePath), context)}/`,
+						},
+					},
 					'css-loader',
 					'postcss-loader',
 				],

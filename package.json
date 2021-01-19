@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env MODE=development webpack",
-    "prod": "cross-env MODE=production webpack",
-    "serve": "cross-env MODE=development webpack serve --hot --inline",
-    "serve:ie": "cross-env MODE=development IE=true webpack serve --target browserslist"
+    "dev": "cross-env NODE_ENV=development webpack",
+    "prod": "cross-env NODE_ENV=production webpack",
+    "build": "npm run prod",
+    "serve": "cross-env NODE_ENV=development SERVE=true webpack serve --hot --inline",
+    "serve:ie": "cross-env NODE_ENV=development IE=true webpack serve --target browserslist"
   },
   "keywords": [],
   "author": "",
