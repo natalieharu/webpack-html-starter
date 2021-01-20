@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const HTMLWebpackPartialsPlugin = require('html-webpack-partials-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
@@ -18,7 +17,7 @@ const plugins = [
 			host: 'localhost',
 			port: 3000,
 			proxy: 'http://localhost:3100/',
-            files: ['./app/**/*.html'],
+            files: ['./app/**/*.pug'],
 			browser: isIE ? 'iexplore' : 'chrome',
 		},
 		{
@@ -27,15 +26,9 @@ const plugins = [
 	),
 	new HTMLWebpackPlugin({
 		filename: 'index.html',
-		template: 'index.html',
+		template: 'index.pug',
 		chunks: ['main'],
 		favicon: 'img/favicon.ico',
-	}),
-	new HTMLWebpackPartialsPlugin({
-		path: path.join(__dirname, './app/partials/menu.html'),
-		location: 'menu',
-		template_filename: ['index.html'],
-		priority: 'replace',
 	}),
 	new MiniCssExtractPlugin({
 		filename: isProd ? 'css/[name].[contenthash].css' : 'css/[name].css',
@@ -103,6 +96,12 @@ module.exports = {
 				test: /\.html$/,
 				use: [
 					'html-loader',
+				],
+			},
+			{
+				test: /\.pug$/,
+				use: [
+					'pug-loader',
 				],
 			},
 			{
